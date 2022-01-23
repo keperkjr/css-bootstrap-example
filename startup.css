@@ -60,6 +60,9 @@ img {
     max-width: 60rem;
     margin: 0 auto;
     text-align: center;
+    background-color: rgba(0,0,0,0.55);
+    padding: 30px;
+    border-radius: 5px;
 }
 
 #stage-caption h1 {
