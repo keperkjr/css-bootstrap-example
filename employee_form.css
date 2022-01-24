@@ -1,7 +1,109 @@
 .content-form .row {
-    margin-top: 10px;
+    margin-top: 20px;
+    align-items: center;
 }
 
 .content-form h4 {
     margin-top: 20px;
+}
+
+body {
+    background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=60");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+}
+
+.main .content-form {
+    max-width: 100%;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 25px;
+    margin-top: 20px;
+    border-radius: 5px;
+    color: white;
+    box-shadow: 6px 9px 10px -6px rgba(0,0,0,0.75);
+}
+
+.main h1 {
+    color: white;
+    text-transform: uppercasae;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+h5 {
+    color: #fff;
+    margin: 10px 0;
+    text-transform: uppercase;
+}
+
+label {
+    color: #fff;
+    opacity: 0.5;
+}
+
+.form-control {
+    background: transparent;
+    border-color: transparent;
+    border-bottom: 1px solid #f00;
+}
+
+.form-control:focus {
+    border-color: red;
+    box-shadow: 1px 1px 1px red inset, 1px 1px 1px red;
+}
+
+select {
+    background: transparent;
+    border-color: transparent;
+    border-bottom: 1px solid #f00;
+    width: 248px;
+    padding: 8px;
+    width: 100%;
+    color: #fff;
+}
+
+select option {
+    color: black;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #grey!important;
+    opacity: 1; /* Firefox */
+}
+
+.btn {
+    font-size: 15px;
+    letter-spacing: 2px;
+    padding: 20px 60px;
+    border-radius: 50px;
+    background: red;
+    color: white:
+    border-color: red;
+}
+
+.btn:hover {
+    background: white;
+    border-color: orange;
+    color: black;
+}
+
+.main .content-form input {
+    color: white;
+    background-color: transparent;
+}
+.line {
+    width: 50px;
+    height: 3px;
+    background: #f00;
+    margin-top: 15px;
+}
+.content-form-header .line{
+    margin-left: auto;
+    margin-right: auto;
+}
+.header {
+    margin-bottom: 30px;
 }
