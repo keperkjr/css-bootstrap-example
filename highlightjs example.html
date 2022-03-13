@@ -10,19 +10,24 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <style>
-.code-container {
+.code-block-container {
     //background-color: #f6f8fa;
     margin-bottom: 50px;
     max-height: 800px;
     overflow: auto;
     border: 1px solid #eee;
-    border-radius: 8px;    
+    border-radius: 8px;
 }
-.code-container pre {
+.code-block-container > * {
+    box-sizing: border-box;
+}
+.code-block-container pre {
     margin: 0;
 }
-.codeblock {
+.code-block {
 }
 .hljs {
   background-color: white;
@@ -52,11 +57,31 @@
     background-color: #ffff99;
     //background-color: #e0ffff;
 }
+.code-block-actions {
+    position: absolute;
+    right: 0;
+    margin-right: 15px;
+    width: 90px;
+    height: 40px;
+    padding-top: 10px;
+    //background-color: red;
+    opacity: 0;
+    transition: opacity 200ms ease-in-out;
+}
+.code-block-actions.active {
+    opacity: 1;
+}
+.code-block-actions button {
+    vertical-align: middle;
+}
 </style>
 <body>
 
-<div class="code-container">
-<pre><code class="codeblock language-xml">
+<div class="code-block-container">
+<div class="code-block-actions">
+    <button class="copy"><i class="fa fa-clipboard"></i></i> Copy</button>
+</div>
+<pre><code class="code-block language-xml">
 <?xml version="1.0" encoding="UTF-8"?>
 <breakfast_menu>
   <food>
@@ -93,8 +118,11 @@
 </code></pre>
 </div>
 
-<div class="code-container">
-<pre><code class="codeblock language-json">
+<div class="code-block-container">
+<div class="code-block-actions">
+    <button class="copy"><i class="fa fa-clipboard"></i></i> Copy</button>
+</div>
+<pre><code class="code-block language-json">
 [
   {
     "id": 1,
@@ -331,13 +359,57 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', (event) => {
-    let codeBlocks = document.querySelectorAll('.codeblock');
-    for (let code of codeBlocks) {
-        code.innerHTML = escapeHTML(code.innerHTML.trim());
+document.addEventListener('DOMContentLoaded', (eventLoaded) => {
+    // Syntax highlight code blocks
+    let codeBlocks = document.querySelectorAll('.code-block');
+    for (let codeblock of codeBlocks) {
+        codeblock.innerHTML = escapeHTML(codeblock.innerHTML.trim());
     }
     hljs.highlightAll();
     hljs.initLineNumbersOnLoad();
+
+    // Add actions to copy buttons
+    let copyButtons = document.querySelectorAll('.code-block-actions .copy');
+    for (let copyButton of copyButtons) {
+        let container = copyButton.closest('.code-block-container');
+        if (!container) {
+            continue;
+        }
+        copyButton.addEventListener('click', async (event) => {
+            let codeblock = container.querySelector('.code-block');
+            let isSuccessful = await copyCodeBlockToClipboard(codeblock);
+
+            if (isSuccessful) {
+                let originalText = copyButton.innerHTML;
+                copyButton.innerHTML = 'Copied!';
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                }, 1500);
+            } else {
+                alert('Automatic copy failed. Please manually copy instead.');
+                selectText(codeblock);
+            }
+        });
+    }
+
+    // Make code block actions visible on hover
+    let codeBlockActions = document.querySelectorAll('.code-block-actions');
+    for (let actions of codeBlockActions) {
+        let container = actions.closest('.code-block-container');
+        if (!container) {
+            continue;
+        }
+        container.addEventListener('mouseover', (event) => {
+            if (!actions.classList.contains('active')) {
+                actions.classList.add('active')
+            }
+        });
+        container.addEventListener('mouseout', (event) => {
+            if (actions.classList.contains('active')) {
+                actions.classList.remove('active');
+            }
+        });
+    }
 });
 
 function escapeHTML(s) {
@@ -345,6 +417,71 @@ function escapeHTML(s) {
         .replace(/"/g, '&quot;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
+}
+
+async function copyCodeBlockToClipboard(codeblock) {
+    selectText(codeblock);
+    let selection = window.getSelection();
+    let text = selection.toString();
+    window.getSelection().removeAllRanges();
+    let isSuccessful = await copyTextToClipboard(text.replace(/\t/g, ''));
+    return isSuccessful;
+}
+
+function selectText(element) {
+    if (document.selection) { // IE
+        var range = document.body.createTextRange();
+        range.moveToElementText(element);
+        range.select();
+    } else if (window.getSelection) {
+        var range = document.createRange();
+        range.selectNode(element);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+    }
+}
+
+function fallbackCopyTextToClipboard(text) {
+    var textArea = document.createElement('textarea');
+    textArea.value = text;
+
+    // Avoid scrolling to bottom
+    textArea.style.top = '0';
+    textArea.style.left = '0';
+    textArea.style.position = 'fixed';
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    let isSuccessful = false;
+    try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Fallback: Copying text command was ' + msg);
+        isSuccessful = successful;
+    } catch (err) {
+        console.error('Fallback: Unable to copy: ', err);
+    }
+
+    document.body.removeChild(textArea);
+    return isSuccessful;
+}
+function copyTextToClipboard(text) {
+    return new Promise(async (resolve, reject) => {
+        if (!navigator.clipboard) {
+            resolve(fallbackCopyTextToClipboard(text));
+            return;
+        }
+        let isSuccessful = false;
+        try {
+            await navigator.clipboard.writeText(text);
+            isSuccessful = true;
+        } catch (err) {
+            console.error('Async: Unable to copy: ', err);
+        }
+        resolve(isSuccessful);
+    });
 }
 </script>
 
