@@ -421,8 +421,8 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
         // Add actions to copy buttons
         let copyButton = container.querySelector('.code-block-toolbar .copy-btn');
         copyButton.addEventListener('click', async (event) => {
-            codeBlockRawText = codeBlockRawText.replace(/(\n|\r)/g, '\r\n');
-            let isSuccessful = await copyTextToClipboard(codeBlockRawText);
+            let formatted = codeBlockRawText.replace(/(\n|\r)/g, '\r\n');
+            let isSuccessful = await copyTextToClipboard(formatted);
 
             if (isSuccessful) {
                 let originalText = copyButton.innerHTML;
