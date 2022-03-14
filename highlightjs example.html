@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
     for (let container of codeBlockContainers) {
         // Get codeblock text
         let codeblock = container.querySelector('.code-block');
-        let codeBlockRawText = codeblock.innerHTML.trim();
+        let codeBlockRawText = codeblock.innerHTML.trim().replace(/(\n|\r)/g, '\r\n');
         codeblock.innerHTML = escapeHTML(codeBlockRawText);
 
         // Syntax highlight code blocks
@@ -421,8 +421,7 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
         // Add actions to copy buttons
         let copyButton = container.querySelector('.code-block-toolbar .copy-btn');
         copyButton.addEventListener('click', async (event) => {
-            let formatted = codeBlockRawText.replace(/(\n|\r)/g, '\r\n');
-            let isSuccessful = await copyTextToClipboard(formatted);
+            let isSuccessful = await copyTextToClipboard(codeBlockRawText);
 
             if (isSuccessful) {
                 let originalText = copyButton.innerHTML;
