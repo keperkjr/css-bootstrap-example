@@ -408,6 +408,7 @@
 document.addEventListener('DOMContentLoaded', (eventLoaded) => {
     // Initialize code blocks
     let codeBlockContainers = document.querySelectorAll('.code-block-container');
+    let copyClearTimeout = {};
     for (let container of codeBlockContainers) {
         // Get codeblock text
         let codeblock = container.querySelector('.code-block');
@@ -420,14 +421,20 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
 
         // Add actions to copy buttons
         let copyButton = container.querySelector('.code-block-toolbar .copy-btn');
+        let copyButtonOriginalText = copyButton.innerHTML;
         copyButton.addEventListener('click', async (event) => {
+            let id = getId(copyButton);
+            if (copyClearTimeout[id]) {
+                clearTimeout(copyClearTimeout[id]);
+                delete copyClearTimeout[id];
+            }
             let isSuccessful = await copyTextToClipboard(codeBlockRawText);
 
             if (isSuccessful) {
-                let originalText = copyButton.innerHTML;
                 copyButton.innerHTML = 'Copied!';
-                setTimeout(() => {
-                    copyButton.innerHTML = originalText;
+                copyClearTimeout[id] = setTimeout(() => {
+                    copyButton.innerHTML = copyButtonOriginalText;
+                    delete copyClearTimeout[id];
                 }, 1500);
             } else {
                 alert('Automatic copy failed. Please manually copy instead.');
@@ -449,6 +456,13 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
         });
     }
 });
+
+function getId(element) {
+    if (!element.id || element.id.trim().length < 1) {
+        element.id = Math.floor(Math.random() * Date.now())
+    }
+    return element.id;
+}
 
 function escapeHTML(s) {
     return s.replace(/&/g, '&amp;')
