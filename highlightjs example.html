@@ -406,24 +406,23 @@
 <script>
 // Codeblock functions
 document.addEventListener('DOMContentLoaded', (eventLoaded) => {
-    // Syntax highlight code blocks
-    let codeBlocks = document.querySelectorAll('.code-block');
-    for (let codeblock of codeBlocks) {
-        codeblock.innerHTML = escapeHTML(codeblock.innerHTML.trim());
-    }
-    hljs.highlightAll();
-    hljs.initLineNumbersOnLoad();
+    // Initialize code blocks
+    let codeBlockContainers = document.querySelectorAll('.code-block-container');
+    for (let container of codeBlockContainers) {
+        // Get codeblock text
+        let codeblock = container.querySelector('.code-block');
+        let codeBlockRawText = codeblock.innerHTML.trim();
+        codeblock.innerHTML = escapeHTML(codeBlockRawText);
 
-    // Add actions to copy buttons
-    let copyButtons = document.querySelectorAll('.code-block-toolbar .copy-btn');
-    for (let copyButton of copyButtons) {
-        let container = copyButton.closest('.code-block-container');
-        if (!container) {
-            continue;
-        }
+        // Syntax highlight code blocks
+        hljs.highlightElement(codeblock);
+        hljs.lineNumbersBlock(codeblock);
+
+        // Add actions to copy buttons
+        let copyButton = container.querySelector('.code-block-toolbar .copy-btn');
         copyButton.addEventListener('click', async (event) => {
-            let codeblock = container.querySelector('.code-block');
-            let isSuccessful = await copyCodeBlockToClipboard(codeblock);
+            codeBlockRawText = codeBlockRawText.replace(/(\n|\r)/g, '\r\n');
+            let isSuccessful = await copyTextToClipboard(codeBlockRawText);
 
             if (isSuccessful) {
                 let originalText = copyButton.innerHTML;
@@ -436,15 +435,9 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
                 selectText(codeblock);
             }
         });
-    }
 
-    // Make code block toolbar visible on hover
-    let codeBlockToolbars = document.querySelectorAll('.code-block-toolbar');
-    for (let toolBar of codeBlockToolbars) {
-        let container = toolBar.closest('.code-block-container');
-        if (!container) {
-            continue;
-        }
+        // Make code block toolbar visible on hover
+        let toolBar = container.querySelector('.code-block-toolbar');
         container.addEventListener('mouseover', (event) => {
             if (!toolBar.classList.contains('active')) {
                 toolBar.classList.add('active')
@@ -463,15 +456,6 @@ function escapeHTML(s) {
         .replace(/"/g, '&quot;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
-}
-
-async function copyCodeBlockToClipboard(codeblock) {
-    selectText(codeblock);
-    let selection = window.getSelection();
-    let text = selection.toString();
-    window.getSelection().removeAllRanges();
-    let isSuccessful = await copyTextToClipboard(text.replace(/\t/g, ''));
-    return isSuccessful;
 }
 
 // Clipboard functions
