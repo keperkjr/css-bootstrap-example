@@ -60,7 +60,7 @@
 .code-block-toolbar {
     position: absolute;
     right: 0;
-    margin-right: 30px;
+    margin-right: 50px;
     width: 90px;
     height: 40px;
     padding-top: 10px;
@@ -68,7 +68,7 @@
     opacity: 0;
     transition: opacity 200ms ease-in-out;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
-      sans-serif, Apple Color Emoji, Segoe UI Emoji;    
+      sans-serif, Apple Color Emoji, Segoe UI Emoji;
 }
 .code-block-toolbar.active {
     opacity: 1;
@@ -77,13 +77,14 @@
     vertical-align: middle;
     cursor: pointer;
 }
-
 .code-block-toolbar .toolbar-btn {
     border: 1px solid #cdd8d8;
     border-radius: 5px;
     padding: 0.4rem;
     text-decoration: none;
-    font-size: 13.5px;
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 90px;
 }
 
 .code-block-toolbar .copy-btn-light {
@@ -93,24 +94,27 @@
 
 .code-block-toolbar .copy-btn-light:hover {
     color: #f7f7f7;
-    background-color: #586069;
+    background-color: #686f78;
 }
 
 .code-block-toolbar .copy-btn-dark {
     color: #f7f7f7;
-    background-color: #586069;
+    background-color: #686f78;
 }
 
 .code-block-toolbar .copy-btn-dark:hover {
     color: black;
     background-color: #e9e9ed;
 }
+.toolbar-btn-text {
+    margin-left: 5px;
+}
 </style>
 <body>
 
 <div class="code-block-container">
 <div class="code-block-toolbar">
-    <button class="toolbar-btn copy-btn copy-btn-light"><i class="fa fa-clipboard"></i></i> Copy</button>
+    <button class="toolbar-btn copy-btn copy-btn-dark"><i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span></button>
 </div>
 <pre><code class="code-block language-xml">
 <?xml version="1.0" encoding="UTF-8"?>
@@ -151,7 +155,7 @@
 
 <div class="code-block-container">
 <div class="code-block-toolbar">
-    <button class="toolbar-btn copy-btn copy-btn-light"><i class="fa fa-clipboard"></i></i> Copy</button>
+    <button class="toolbar-btn copy-btn copy-btn-dark"><i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span></button>
 </div>
 <pre><code class="code-block language-json">
 [
@@ -511,8 +515,8 @@ function copyTextToClipboard(text) {
                 isSuccessful = true;
             } catch (err) {
                 console.error('Async: Unable to copy: ', err);
-            }        
-        }       
+            }
+        }
         resolve(isSuccessful);
     });
 }
