@@ -408,7 +408,7 @@
 document.addEventListener('DOMContentLoaded', (eventLoaded) => {
     // Initialize code blocks
     let codeBlockContainers = document.querySelectorAll('.code-block-container');
-    let copyClearTimeout = {};
+    let copyClearTimeout = null;
     for (let container of codeBlockContainers) {
         // Get codeblock text
         let codeblock = container.querySelector('.code-block');
@@ -424,17 +424,16 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
         let copyButtonOriginalText = copyButton.innerHTML;
         copyButton.addEventListener('click', async (event) => {
             let id = getId(copyButton);
-            if (copyClearTimeout[id]) {
-                clearTimeout(copyClearTimeout[id]);
-                delete copyClearTimeout[id];
+            if (copyClearTimeout) {
+                clearTimeout(copyClearTimeout);
             }
             let isSuccessful = await copyTextToClipboard(codeBlockRawText);
 
             if (isSuccessful) {
                 copyButton.innerHTML = 'Copied!';
-                copyClearTimeout[id] = setTimeout(() => {
+                copyClearTimeout = setTimeout(() => {
                     copyButton.innerHTML = copyButtonOriginalText;
-                    delete copyClearTimeout[id];
+                    copyClearTimeout = null;
                 }, 1500);
             } else {
                 alert('Automatic copy failed. Please manually copy instead.');
