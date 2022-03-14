@@ -423,7 +423,6 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
         let copyButtonOriginalText = copyButton.innerHTML;
         let copyClearTimeout = null;
         copyButton.addEventListener('click', async (event) => {
-            let id = getId(copyButton);
             if (copyClearTimeout) {
                 clearTimeout(copyClearTimeout);
             }
@@ -455,13 +454,6 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
         });
     }
 });
-
-function getId(element) {
-    if (!element.id || element.id.trim().length < 1) {
-        element.id = Math.floor(Math.random() * Date.now())
-    }
-    return element.id;
-}
 
 function escapeHTML(s) {
     return s.replace(/&/g, '&amp;')
