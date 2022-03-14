@@ -43,7 +43,7 @@
 .hljs-ln-numbers {
     color: grey;
     text-align: center;
-    border-right: 1.5px solid #cdd8d8;
+    border-right: 1px solid #cdd8d8;
     vertical-align: middle;
 }
 .hljs-ln-numbers, .hljs-ln-n {
@@ -57,29 +57,60 @@
     background-color: #ffff99;
     //background-color: #e0ffff;
 }
-.code-block-actions {
+.code-block-toolbar {
     position: absolute;
     right: 0;
-    margin-right: 15px;
+    margin-right: 30px;
     width: 90px;
     height: 40px;
     padding-top: 10px;
     //background-color: red;
     opacity: 0;
     transition: opacity 200ms ease-in-out;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
+      sans-serif, Apple Color Emoji, Segoe UI Emoji;    
 }
-.code-block-actions.active {
+.code-block-toolbar.active {
     opacity: 1;
 }
-.code-block-actions button {
+.code-block-toolbar button {
     vertical-align: middle;
+    cursor: pointer;
+}
+
+.code-block-toolbar .toolbar-btn {
+    border: 1px solid #cdd8d8;
+    border-radius: 5px;
+    padding: 0.4rem;
+    text-decoration: none;
+    font-size: 13.5px;
+}
+
+.code-block-toolbar .copy-btn-light {
+    color: black;
+    background-color: #e9e9ed;
+}
+
+.code-block-toolbar .copy-btn-light:hover {
+    color: #f7f7f7;
+    background-color: #586069;
+}
+
+.code-block-toolbar .copy-btn-dark {
+    color: #f7f7f7;
+    background-color: #586069;
+}
+
+.code-block-toolbar .copy-btn-dark:hover {
+    color: black;
+    background-color: #e9e9ed;
 }
 </style>
 <body>
 
 <div class="code-block-container">
-<div class="code-block-actions">
-    <button class="copy"><i class="fa fa-clipboard"></i></i> Copy</button>
+<div class="code-block-toolbar">
+    <button class="toolbar-btn copy-btn copy-btn-light"><i class="fa fa-clipboard"></i></i> Copy</button>
 </div>
 <pre><code class="code-block language-xml">
 <?xml version="1.0" encoding="UTF-8"?>
@@ -119,8 +150,8 @@
 </div>
 
 <div class="code-block-container">
-<div class="code-block-actions">
-    <button class="copy"><i class="fa fa-clipboard"></i></i> Copy</button>
+<div class="code-block-toolbar">
+    <button class="toolbar-btn copy-btn copy-btn-light"><i class="fa fa-clipboard"></i></i> Copy</button>
 </div>
 <pre><code class="code-block language-json">
 [
@@ -359,6 +390,7 @@
 </div>
 
 <script>
+// Codeblock functions
 document.addEventListener('DOMContentLoaded', (eventLoaded) => {
     // Syntax highlight code blocks
     let codeBlocks = document.querySelectorAll('.code-block');
@@ -369,7 +401,7 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
     hljs.initLineNumbersOnLoad();
 
     // Add actions to copy buttons
-    let copyButtons = document.querySelectorAll('.code-block-actions .copy');
+    let copyButtons = document.querySelectorAll('.code-block-toolbar .copy-btn');
     for (let copyButton of copyButtons) {
         let container = copyButton.closest('.code-block-container');
         if (!container) {
@@ -392,21 +424,21 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
         });
     }
 
-    // Make code block actions visible on hover
-    let codeBlockActions = document.querySelectorAll('.code-block-actions');
-    for (let actions of codeBlockActions) {
-        let container = actions.closest('.code-block-container');
+    // Make code block toolbar visible on hover
+    let codeBlockToolbars = document.querySelectorAll('.code-block-toolbar');
+    for (let toolBar of codeBlockToolbars) {
+        let container = toolBar.closest('.code-block-container');
         if (!container) {
             continue;
         }
         container.addEventListener('mouseover', (event) => {
-            if (!actions.classList.contains('active')) {
-                actions.classList.add('active')
+            if (!toolBar.classList.contains('active')) {
+                toolBar.classList.add('active')
             }
         });
         container.addEventListener('mouseout', (event) => {
-            if (actions.classList.contains('active')) {
-                actions.classList.remove('active');
+            if (toolBar.classList.contains('active')) {
+                toolBar.classList.remove('active');
             }
         });
     }
@@ -428,6 +460,7 @@ async function copyCodeBlockToClipboard(codeblock) {
     return isSuccessful;
 }
 
+// Clipboard functions
 function selectText(element) {
     if (document.selection) { // IE
         var range = document.body.createTextRange();
@@ -469,17 +502,17 @@ function fallbackCopyTextToClipboard(text) {
 }
 function copyTextToClipboard(text) {
     return new Promise(async (resolve, reject) => {
-        if (!navigator.clipboard) {
-            resolve(fallbackCopyTextToClipboard(text));
-            return;
-        }
         let isSuccessful = false;
-        try {
-            await navigator.clipboard.writeText(text);
-            isSuccessful = true;
-        } catch (err) {
-            console.error('Async: Unable to copy: ', err);
-        }
+        if (!navigator.clipboard) {
+            isSuccessful = fallbackCopyTextToClipboard(text);
+        } else {
+            try {
+                await navigator.clipboard.writeText(text);
+                isSuccessful = true;
+            } catch (err) {
+                console.error('Async: Unable to copy: ', err);
+            }        
+        }       
         resolve(isSuccessful);
     });
 }
