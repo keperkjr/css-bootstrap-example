@@ -408,7 +408,6 @@
 document.addEventListener('DOMContentLoaded', (eventLoaded) => {
     // Initialize code blocks
     let codeBlockContainers = document.querySelectorAll('.code-block-container');
-    let copyClearTimeout = null;
     for (let container of codeBlockContainers) {
         // Get codeblock text
         let codeblock = container.querySelector('.code-block');
@@ -422,6 +421,7 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
         // Add actions to copy buttons
         let copyButton = container.querySelector('.code-block-toolbar .copy-btn');
         let copyButtonOriginalText = copyButton.innerHTML;
+        let copyClearTimeout = null;
         copyButton.addEventListener('click', async (event) => {
             let id = getId(copyButton);
             if (copyClearTimeout) {
