@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', (eventLoaded) => {
     for (let container of codeBlockContainers) {
         // Get codeblock text
         let codeblock = container.querySelector('.code-block');
-        let codeBlockRawText = codeblock.innerHTML.trim().replace(/(\n|\r)/g, '\r\n');
+        let codeBlockRawText = codeblock.innerHTML.replace(/(\n|\r)/g, '\r\n');
         codeblock.innerHTML = escapeHTML(codeBlockRawText);
 
         // Syntax highlight code blocks
