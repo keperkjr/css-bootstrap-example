@@ -20,6 +20,7 @@
     overflow: auto;
     border: 1px solid #eee;
     border-radius: 8px;
+	position: relative;
 }
 .code-block-container > * {
     box-sizing: border-box;
@@ -57,9 +58,16 @@
     background-color: #ffff99;
     //background-color: #e0ffff;
 }
-.code-block-toolbar {
-    position: absolute;
+
+.code-block-toolbar-sticky {
+    position: sticky;
     right: 0;
+    top: 0;
+    float: right;
+    height: 0;
+}
+
+.code-block-toolbar {
     margin-right: 50px;
     width: 90px;
     height: 40px;
@@ -123,8 +131,10 @@
 <body>
 
 <div class="code-block-container">
-<div class="code-block-toolbar">
-    <button class="toolbar-btn copy-btn copy-btn-dark"><i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span></button>
+<div class="code-block-toolbar-sticky">
+	<div class="code-block-toolbar">
+		<button class="toolbar-btn copy-btn copy-btn-dark"><i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span></button>
+	</div>
 </div>
 <pre><code class="code-block language-xml">
 <?xml version="1.0" encoding="UTF-8"?>
@@ -164,8 +174,10 @@
 </div>
 
 <div class="code-block-container">
-<div class="code-block-toolbar">
-    <button class="toolbar-btn copy-btn copy-btn-dark"><i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span></button>
+<div class="code-block-toolbar-sticky">
+	<div class="code-block-toolbar">
+		<button class="toolbar-btn copy-btn copy-btn-dark"><i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span></button>
+	</div>
 </div>
 <pre><code class="code-block language-json">
 [
