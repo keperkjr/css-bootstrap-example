@@ -14,49 +14,76 @@
 
 <style>
 .code-block-container {
-    //background-color: #f6f8fa;
-    margin-bottom: 50px;
-    max-height: 800px;
+    max-height: 550px;
     overflow: auto;
     border: 1px solid #eee;
     border-radius: 8px;
     position: relative;
+    width: 100%;
+    background-color: white;
+    margin: auto;
 }
-.code-block-container > * {
-    box-sizing: border-box;
+
+.code-block-container * {
+    box-sizing: border-box !important;
 }
+
 .code-block-container pre {
     margin: 0;
+    width: inherit;
+    overflow: unset!important;
 }
+
 .code-block {
 }
-.hljs {
-  background-color: white;
-  //line-height: 1.1;
-  font-size: 1rem;
+
+.hljs, .code-block-content-container {
+    background-color: white !important;
+    font-size: 1rem;
 }
+
 .hljs-ln {
-    width: 100%;
+    border: none !important;
+    background: none !important;
+    padding: 0 !important;
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+    border-spacing: 0 !important;
+    border-collapse: collapse !important;
+    table-layout: auto !important;
 }
+
+.hljs-ln tr {
+    background-color: white!important;
+}
+
 .hljs-ln tr:nth-of-type(odd) {
-    background-color: #f5f7f7;
+    background-color: #f5f7f7!important;
 }
+
 .hljs-ln-numbers {
     color: grey;
     text-align: center;
-    border-right: 1px solid #cdd8d8;
-    vertical-align: middle;
+    border-right: 1px solid #cdd8d8 !important;
+    vertical-align: middle !important;
 }
+
 .hljs-ln-numbers, .hljs-ln-n {
     width: 50px;
 }
+
 .hljs-ln-code {
     margin-left: 10px;
     display: block;
 }
+
 .hljs-ln tr:hover {
-    background-color: #ffff99;
-    //background-color: #e0ffff;
+    background-color: #ffff99!important;
+}
+
+.hljs-attr {
+    font-weight: 700;
 }
 
 .code-block-toolbar-sticky {
@@ -69,22 +96,21 @@
 
 .code-block-toolbar {
     margin-right: 50px;
-    width: 90px;
-    height: 40px;
     padding-top: 10px;
-    //background-color: red;
     opacity: 0;
     transition: opacity 200ms ease-in-out;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
-      sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
 }
+
 .code-block-toolbar.active {
     opacity: 1;
 }
+
 .code-block-toolbar button {
     vertical-align: middle;
     cursor: pointer;
 }
+
 .code-block-toolbar .toolbar-btn {
     border: 1px solid #cdd8d8;
     border-radius: 5px;
@@ -114,30 +140,73 @@
     color: black;
     background-color: #e9e9ed;
 }
+
 .code-block-toolbar .copy-btn-light:active {
-  /* darken #586069 by 20% https://www.cssfontstack.com/oldsites/hexcolortool/ */
-  background-color: #252d36;
+    /* darken #586069 by 20% https://www.cssfontstack.com/oldsites/hexcolortool/ */
+    background-color: #252d36;
 }
 
 .code-block-toolbar .copy-btn-dark:active {
-  /* darken #f7f7f7 by 20% */
-  background-color: #c4c4c4;
+    /* darken #f7f7f7 by 20% */
+    background-color: #c4c4c4;
 }
 
 .toolbar-btn-text {
     margin-left: 5px;
 }
+.code-block-raw-code {
+    display: none;
+}
+
+.code-block-container pre code.hljs {
+    overflow-x: unset!important;
+}
+
+.hljs-ln-code {
+    padding-right: 8px !important;
+}
+
+.code-block-container pre,
+.code-block-container code,
+.code-block-container table,
+.code-block-container .code-block-content-container,
+.code-block-container .code-block-content {
+    width: auto !important;
+    min-width: 100%;
+}
+
+.code-block-no-line-wrap pre {
+    white-space: pre !important;
+}
+
+.code-block-content-container,
+.code-block-content {
+    display: inline-block !important;
+}
 </style>
+
+<style>
+
+main {
+    //max-width: 300px;
+}
+</style>
+
 <body>
 
-<div class="code-block-container">
-<div class="code-block-toolbar-sticky">
-    <div class="code-block-toolbar">
-        <button class="toolbar-btn copy-btn copy-btn-dark"><i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span></button>
-    </div>
-</div>
-<pre><code class="code-block language-xml">
-<?xml version="1.0" encoding="UTF-8"?>
+<main>
+<section class="code-block-container code-block-no-line-wrap">
+    <div class="code-block-content-container">
+        <div class="code-block-content">
+            <div class="code-block-toolbar-sticky">
+                <div class="code-block-toolbar">
+                    <button class="toolbar-btn copy-btn copy-btn-dark">
+                        <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
+                    </button>
+                </div>
+            </div>
+            <pre><code class="code-block language-xml"></code></pre>
+            <textarea class="code-block-raw-code"><?xml version="1.0" encoding="UTF-8"?>
 <breakfast_menu>
   <food>
     <name>Belgian Waffles</name>
@@ -169,18 +238,24 @@
     <description>Two eggs, bacon or sausage, toast, and our ever-popular hash browns</description>
     <calories>950</calories>
   </food>
-</breakfast_menu>
-</code></pre>
-</div>
-
-<div class="code-block-container">
-<div class="code-block-toolbar-sticky">
-    <div class="code-block-toolbar">
-        <button class="toolbar-btn copy-btn copy-btn-dark"><i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span></button>
+</breakfast_menu></textarea>
+        </div>
     </div>
-</div>
-<pre><code class="code-block language-json">
-[
+</section>
+</div>            
+
+<section class="code-block-container">
+    <div class="code-block-content-container">
+        <div class="code-block-content">
+            <div class="code-block-toolbar-sticky">
+                <div class="code-block-toolbar">
+                    <button class="toolbar-btn copy-btn copy-btn-dark">
+                        <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
+                    </button>
+                </div>
+            </div>
+            <pre><code class="code-block"></code></pre>
+            <textarea class="code-block-raw-code">[
   {
     "id": 1,
     "name": "Leanne Graham",
@@ -411,60 +486,78 @@
       "bs": "target end-to-end models"
     }
   }
-]
-</code></pre>
+]</textarea>
+        </div>
+    </div>
+</section>
 </div>
 
+</main>
+
 <script>
+
 // Codeblock functions
-document.addEventListener('DOMContentLoaded', (eventLoaded) => {
+function initCodeblocks(parentContainer = document) {
     // Initialize code blocks
-    let codeBlockContainers = document.querySelectorAll('.code-block-container');
+    let codeBlockContainers = parentContainer.querySelectorAll('.code-block-container');
     for (let container of codeBlockContainers) {
         // Get codeblock text
         let codeblock = container.querySelector('.code-block');
-        let codeBlockRawText = codeblock.innerHTML.replace(/(\n|\r)/g, '\r\n');
-        codeblock.innerHTML = escapeHTML(codeBlockRawText);
-
+        let codeblockRawCode = container.querySelector('.code-block-raw-code');
+        let rawCode = codeblockRawCode == null ? '' : codeblockRawCode.value;
+        
+        let rawCodeCleaned = rawCode.replace(/(\n|\r)/g, '\r\n');
+        codeblock.innerHTML = escapeHTML(rawCodeCleaned);
+        
+        rawCode = rawCodeCleaned;
+        
         // Syntax highlight code blocks
         hljs.highlightElement(codeblock);
         hljs.lineNumbersBlock(codeblock);
 
-        // Add actions to copy buttons
-        let copyButton = container.querySelector('.code-block-toolbar .copy-btn');
-        let copyButtonOriginalText = copyButton.innerHTML;
-        let copyClearTimeout = null;
-        copyButton.addEventListener('click', async (event) => {
-            if (copyClearTimeout) {
-                clearTimeout(copyClearTimeout);
-            }
-            let isSuccessful = await copyTextToClipboard(codeBlockRawText);
-
-            if (isSuccessful) {
-                copyButton.innerHTML = 'Copied!';
-                copyClearTimeout = setTimeout(() => {
-                    copyButton.innerHTML = copyButtonOriginalText;
-                    copyClearTimeout = null;
-                }, 1500);
-            } else {
-                alert('Automatic copy failed. Please manually copy instead.');
-                selectText(codeblock);
-            }
-        });
-
         // Make code block toolbar visible on hover
         let toolBar = container.querySelector('.code-block-toolbar');
-        container.addEventListener('mouseover', (event) => {
-            if (!toolBar.classList.contains('active')) {
-                toolBar.classList.add('active')
+        if (toolBar) {
+            container.addEventListener('mouseover', (event) => {
+                if (!toolBar.classList.contains('active')) {
+                    toolBar.classList.add('active')
+                }
+            });
+            container.addEventListener('mouseout', (event) => {
+                if (toolBar.classList.contains('active')) {
+                    toolBar.classList.remove('active');
+                }
+            });
+
+            // Add actions to copy buttons
+            let copyButton = toolBar.querySelector('.copy-btn');
+            if (copyButton) {
+                let copyButtonOriginalText = copyButton.innerHTML;
+                let copyClearTimeout = null;
+                copyButton.addEventListener('click', async (event) => {
+                    if (copyClearTimeout) {
+                        clearTimeout(copyClearTimeout);
+                    }
+                    let isSuccessful = await copyTextToClipboard(rawCode);
+
+                    if (isSuccessful) {
+                        copyButton.innerHTML = 'Copied!';
+                        copyClearTimeout = setTimeout(() => {
+                            copyButton.innerHTML = copyButtonOriginalText;
+                            copyClearTimeout = null;
+                        }, 1500);
+                    } else {
+                        alert('Automatic copy failed. Please manually copy instead.');
+                        selectText(codeblock);
+                    }
+                });
             }
-        });
-        container.addEventListener('mouseout', (event) => {
-            if (toolBar.classList.contains('active')) {
-                toolBar.classList.remove('active');
-            }
-        });
+        }
     }
+}
+
+document.addEventListener('DOMContentLoaded', (eventLoaded) => {
+    initCodeblocks();
 });
 
 function escapeHTML(s) {
