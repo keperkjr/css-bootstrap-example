@@ -183,12 +183,27 @@
 .code-block-content {
     display: inline-block !important;
 }
+
+.code-block-container .hljs-ln-line {
+    word-break: break-all;
+    white-space: pre-wrap;
+}
+
+.code-block-no-line-wrap .hljs-ln-line {
+    word-break: normal !important;
+    white-space: pre !important;
+}
 </style>
 
 <style>
 
 main {
-    //max-width: 300px;
+    max-width: 500px;
+    border: 1px solid black;
+}
+
+.code-block-container {
+    max-width: 400px;
 }
 </style>
 
