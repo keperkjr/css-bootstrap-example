@@ -175,20 +175,16 @@
     min-width: 100%;
 }
 
-.code-block-no-line-wrap pre {
-    white-space: pre !important;
-}
-
 .code-block-content-container,
 .code-block-content {
     display: inline-block !important;
 }
 
 .code-block-container .hljs-ln-line {
-    white-space: pre-wrap;
+    white-space: pre-wrap !important;
 }
 
-.code-block-no-line-wrap .hljs-ln-line {
+.code-block-no-line-wrap .hljs-ln-line, .code-block-no-line-wrap pre {
     white-space: pre !important;
 }
 </style>
