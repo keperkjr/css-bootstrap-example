@@ -95,7 +95,7 @@
 }
 
 .code-block-toolbar {
-    margin-right: 50px;
+    margin-right: 50px; 
     padding-top: 10px;
     opacity: 0;
     transition: opacity 200ms ease-in-out;
@@ -154,6 +154,7 @@
 .toolbar-btn-text {
     margin-left: 5px;
 }
+
 .code-block-raw-code {
     display: none;
 }
@@ -180,12 +181,14 @@
     display: inline-block !important;
 }
 
-.code-block-container .hljs-ln-line {
+.code-block-container .hljs-ln-line, .code-block-container pre {
     white-space: pre-wrap !important;
+    word-wrap: break-word !important;
 }
 
 .code-block-no-line-wrap .hljs-ln-line, .code-block-no-line-wrap pre {
     white-space: pre !important;
+    word-wrap: normal !important;
 }
 </style>
 
@@ -210,7 +213,12 @@ main {
             <div class="code-block-toolbar-sticky">
                 <div class="code-block-toolbar">
                     <button class="toolbar-btn copy-btn copy-btn-dark">
-                        <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
+                        <div class="toolbar-action-initial">
+                            <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
+                        </div>
+                        <div class="toolbar-action-performed" style="display: none;">                           
+                            <span class="toolbar-btn-text">Copied!</span>
+                        </div>
                     </button>
                 </div>
             </div>
@@ -259,7 +267,12 @@ main {
             <div class="code-block-toolbar-sticky">
                 <div class="code-block-toolbar">
                     <button class="toolbar-btn copy-btn copy-btn-dark">
-                        <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
+                        <div class="toolbar-action-initial">
+                            <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
+                        </div>
+                        <div class="toolbar-action-performed" style="display: none;">                           
+                            <span class="toolbar-btn-text">Copied!</span>
+                        </div>
                     </button>
                 </div>
             </div>
@@ -509,59 +522,88 @@ main {
 function initCodeblocks(parentContainer = document) {
     // Initialize code blocks
     let codeBlockContainers = parentContainer.querySelectorAll('.code-block-container');
-    for (let container of codeBlockContainers) {
-        // Get codeblock text
-        let codeblock = container.querySelector('.code-block');
-        let codeblockRawCode = container.querySelector('.code-block-raw-code');
-        let rawCode = codeblockRawCode == null ? '' : codeblockRawCode.value;
-        
-        let rawCodeCleaned = rawCode.replace(/(\n|\r)/g, '\r\n');
-        codeblock.innerHTML = escapeHTML(rawCodeCleaned);
-        
-        rawCode = rawCodeCleaned;
-        
-        // Syntax highlight code blocks
-        hljs.highlightElement(codeblock);
-        hljs.lineNumbersBlock(codeblock);
+    for (let codeBlockContainer of codeBlockContainers) {
+        initCodeBlock(codeBlockContainer);
+    }
+}
 
-        // Make code block toolbar visible on hover
-        let toolBar = container.querySelector('.code-block-toolbar');
-        if (toolBar) {
-            container.addEventListener('mouseover', (event) => {
-                if (!toolBar.classList.contains('active')) {
-                    toolBar.classList.add('active')
-                }
-            });
-            container.addEventListener('mouseout', (event) => {
-                if (toolBar.classList.contains('active')) {
-                    toolBar.classList.remove('active');
-                }
-            });
+function initCodeBlock(codeBlockContainer) {
+    // Get codeblock text
+    let codeblock = codeBlockContainer.querySelector('.code-block');
+    let codeblockRawCode = codeBlockContainer.querySelector('.code-block-raw-code');
+    let rawCode = codeblockRawCode == null ? '' : codeblockRawCode.value;
+    
+    let rawCodeCleaned = rawCode.replace(/(\n|\r)/g, '\r\n');
+    codeblock.innerHTML = escapeHTML(rawCodeCleaned);
+    
+    rawCode = rawCodeCleaned;
 
-            // Add actions to copy buttons
-            let copyButton = toolBar.querySelector('.copy-btn');
-            if (copyButton) {
-                let copyButtonOriginalText = copyButton.innerHTML;
-                let copyClearTimeout = null;
-                copyButton.addEventListener('click', async (event) => {
-                    if (copyClearTimeout) {
-                        clearTimeout(copyClearTimeout);
-                    }
-                    let isSuccessful = await copyTextToClipboard(rawCode);
+    // Syntax highlight code blocks
+    hljs.highlightElement(codeblock);
+    hljs.lineNumbersBlock(codeblock);
 
-                    if (isSuccessful) {
-                        copyButton.innerHTML = 'Copied!';
-                        copyClearTimeout = setTimeout(() => {
-                            copyButton.innerHTML = copyButtonOriginalText;
-                            copyClearTimeout = null;
-                        }, 1500);
-                    } else {
-                        alert('Automatic copy failed. Please manually copy instead.');
-                        selectText(codeblock);
-                    }
-                });
-            }
+    // Make code block toolbar visible on hover
+    initCodeBlockToolbar(codeBlockContainer, rawCode);
+}
+
+function initCodeBlockToolbar(codeBlockContainer, rawCode) {
+    let toolBar = codeBlockContainer.querySelector('.code-block-toolbar');
+    if (!toolBar) {
+        return;
+    }
+
+    codeBlockContainer.addEventListener('mouseover', (event) => {
+        if (!toolBar.classList.contains('active')) {
+            toolBar.classList.add('active')
         }
+    });
+
+    codeBlockContainer.addEventListener('mouseout', (event) => {
+        if (toolBar.classList.contains('active')) {
+            toolBar.classList.remove('active');
+        }
+    });
+
+    // Add actions to copy buttons
+    initCodeBlockCopyButton(toolBar, rawCode);
+}
+
+function initCodeBlockCopyButton(toolBar, rawCode) {
+    let copyButton = toolBar.querySelector('.copy-btn');
+    if (!copyButton) {
+        return;
+    }
+
+    let copyClearTimeout = null;
+    copyButton.addEventListener('click', async (event) => {
+        if (copyClearTimeout) {
+            clearTimeout(copyClearTimeout);
+        }
+        let isSuccessful = await copyTextToClipboard(rawCode);
+
+        if (isSuccessful) {
+            showHideToolbarAction(copyButton, true);
+            copyClearTimeout = setTimeout(() => {
+                showHideToolbarAction(copyButton, false);
+                copyClearTimeout = null;
+            }, 1500);
+        } else {
+            alert('Automatic copy failed. Please manually copy instead.');
+            selectText(codeblock);
+        }
+    });
+}
+
+function showHideToolbarAction(parent, isActionPerformed) {
+    let actionInitial = parent.querySelector('.toolbar-action-initial');
+    let actionPerformed = parent.querySelector('.toolbar-action-performed');
+
+    if (isActionPerformed) {
+        actionInitial.style.display = 'none';
+        actionPerformed.style.display = 'block';
+    } else {
+        actionInitial.style.display = null;
+        actionPerformed.style.display = 'none';
     }
 }
 
