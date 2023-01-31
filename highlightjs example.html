@@ -96,7 +96,7 @@
 }
 
 .code-block-toolbar {
-    margin-right: 50px; 
+    margin-right: 50px;
     padding-top: 10px;
     opacity: 0;
     transition: opacity 200ms ease-in-out;
@@ -230,7 +230,7 @@ main {
                         <div class="toolbar-action-initial">
                             <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
                         </div>
-                        <div class="toolbar-action-performed" style="display: none;">                           
+                        <div class="toolbar-action-performed" style="display: none;">
                             <span class="toolbar-btn-text">Copied!</span>
                         </div>
                     </button>
@@ -272,7 +272,7 @@ main {
 </breakfast_menu></textarea>
         </div>
     </div>
-</section>           
+</section>
 
 <section class="code-block-container code-block-no-line-numbers">
     <div class="code-block-content-container">
@@ -283,7 +283,7 @@ main {
                         <div class="toolbar-action-initial">
                             <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
                         </div>
-                        <div class="toolbar-action-performed" style="display: none;">                           
+                        <div class="toolbar-action-performed" style="display: none;">
                             <span class="toolbar-btn-text">Copied!</span>
                         </div>
                     </button>
@@ -537,7 +537,7 @@ main {
                         <div class="toolbar-action-initial">
                             <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
                         </div>
-                        <div class="toolbar-action-performed" style="display: none;">                           
+                        <div class="toolbar-action-performed" style="display: none;">
                             <span class="toolbar-btn-text">Copied!</span>
                         </div>
                     </button>
@@ -559,7 +559,7 @@ main {
                         <div class="toolbar-action-initial">
                             <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
                         </div>
-                        <div class="toolbar-action-performed" style="display: none;">                           
+                        <div class="toolbar-action-performed" style="display: none;">
                             <span class="toolbar-btn-text">Copied!</span>
                         </div>
                     </button>
@@ -581,7 +581,7 @@ main {
                         <div class="toolbar-action-initial">
                             <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
                         </div>
-                        <div class="toolbar-action-performed" style="display: none;">                           
+                        <div class="toolbar-action-performed" style="display: none;">
                             <span class="toolbar-btn-text">Copied!</span>
                         </div>
                     </button>
@@ -604,7 +604,7 @@ main {
                         <div class="toolbar-action-initial">
                             <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
                         </div>
-                        <div class="toolbar-action-performed" style="display: none;">                           
+                        <div class="toolbar-action-performed" style="display: none;">
                             <span class="toolbar-btn-text">Copied!</span>
                         </div>
                     </button>
@@ -626,7 +626,7 @@ main {
                         <div class="toolbar-action-initial">
                             <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
                         </div>
-                        <div class="toolbar-action-performed" style="display: none;">                           
+                        <div class="toolbar-action-performed" style="display: none;">
                             <span class="toolbar-btn-text">Copied!</span>
                         </div>
                     </button>
@@ -648,7 +648,7 @@ main {
                         <div class="toolbar-action-initial">
                             <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
                         </div>
-                        <div class="toolbar-action-performed" style="display: none;">                           
+                        <div class="toolbar-action-performed" style="display: none;">
                             <span class="toolbar-btn-text">Copied!</span>
                         </div>
                     </button>
@@ -670,7 +670,7 @@ main {
                         <div class="toolbar-action-initial">
                             <i class="fa fa-clipboard"></i> <span class="toolbar-btn-text">Copy</span>
                         </div>
-                        <div class="toolbar-action-performed" style="display: none;">                           
+                        <div class="toolbar-action-performed" style="display: none;">
                             <span class="toolbar-btn-text">Copied!</span>
                         </div>
                     </button>
@@ -701,10 +701,10 @@ function initCodeBlock(codeBlockContainer) {
     let codeblock = codeBlockContainer.querySelector('.code-block');
     let codeblockRawCode = codeBlockContainer.querySelector('.code-block-raw-code');
     let rawCode = codeblockRawCode == null ? '' : codeblockRawCode.value;
-    
+
     let rawCodeCleaned = rawCode.replace(/(\n|\r)/g, '\r\n');
     codeblock.innerHTML = escapeHTML(rawCodeCleaned);
-    
+
     rawCode = rawCodeCleaned;
 
     // Syntax highlight code blocks
@@ -734,15 +734,16 @@ function initCodeBlockToolbar(codeBlockContainer, rawCode) {
     });
 
     // Add actions to copy buttons
-    initCodeBlockCopyButton(toolBar, rawCode);
+    initCodeBlockCopyButton(codeBlockContainer, toolBar, rawCode);
 }
 
-function initCodeBlockCopyButton(toolBar, rawCode) {
+function initCodeBlockCopyButton(codeBlockContainer, toolBar, rawCode) {
     let copyButton = toolBar.querySelector('.copy-btn');
     if (!copyButton) {
         return;
     }
 
+    let codeBlock = codeBlockContainer.querySelector('.code-block');
     let copyClearTimeout = null;
     copyButton.addEventListener('click', async (event) => {
         if (copyClearTimeout) {
@@ -758,7 +759,7 @@ function initCodeBlockCopyButton(toolBar, rawCode) {
             }, 1500);
         } else {
             alert('Automatic copy failed. Please manually copy instead.');
-            selectText(codeblock);
+            selectText(codeBlock);
         }
     });
 }
